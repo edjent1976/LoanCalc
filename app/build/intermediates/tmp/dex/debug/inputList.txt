@@ -1,0 +1,5 @@
+/home/edjent1976/AndroidStudioProjects/LoanCalc/app/build/intermediates/classes/debug
+/home/edjent1976/AndroidStudioProjects/LoanCalc/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-28d49afe69b46fa44a8b9ad60c6f6c28ad9b9641.jar
+/home/edjent1976/AndroidStudioProjects/LoanCalc/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-7f233f41587165df8810ab26fa2c1922c73d4271.jar
+/home/edjent1976/AndroidStudioProjects/LoanCalc/app/build/intermediates/pre-dexed/debug/classes-87cd67eb28c7d89e2dca57e26d688ddf01078a04.jar
+/home/edjent1976/AndroidStudioProjects/LoanCalc/app/build/intermediates/pre-dexed/debug/classes-26559d32ec6851c233737e52b1113f113f7ecf74.jar
