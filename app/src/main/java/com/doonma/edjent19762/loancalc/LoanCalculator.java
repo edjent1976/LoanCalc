@@ -168,12 +168,21 @@ public class LoanCalculator extends Fragment implements OnClickListener {
     }
 
     public void calculatePayment() {
-        loanAmount = interestRate * payment;
-        loanAmountText.setText(Double.toString(loanAmount));
+      double ratePerPeriod = interestRate/ 100/12;
+      Toast.makeText(getActivity(), "The Rate Per Period is: " + ratePerPeriod, Toast.LENGTH_LONG).show();
+      double numerator = ratePerPeriod * loanAmount;
+
+        double denominator = 1- (Math.pow(1+ratePerPeriod, (-numberOfYears *12)));
+        payment= numerator/denominator;
+        monthlyPaymentText.setText(Double.toString(payment));
 
     }
 
     public void resetPayment(){
+       interestRateText.setText(Double.toString(0.0));
+       monthlyPaymentText.setText(Double.toString(0.0));
+       numberOfYearsText.setText(Double.toString(0.0));
+       loanAmountText.setText(Double.toString(0.0));
 
     }
 
@@ -187,6 +196,7 @@ public class LoanCalculator extends Fragment implements OnClickListener {
                 break;
 
             case R.id.reset_button:
+                resetPayment();
                 //interestRate = null;
                 //interestRateText.setText.
                 //payment = null;
