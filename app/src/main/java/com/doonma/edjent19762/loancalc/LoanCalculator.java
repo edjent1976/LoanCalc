@@ -29,10 +29,10 @@ public class LoanCalculator extends Fragment implements OnClickListener {
     EditText monthlyPaymentText;
     Button resetButton;
     Button calculateButton;
-    Double loanAmount;
-    Double interestRate;
-    Double numberOfYears;
-    Double payment;
+    Double loanAmount = 0.0;
+    Double interestRate =0.0;
+    Double numberOfYears= 0.0;
+    Double payment =0.0;
     private static String title = "Loan Calculator";
     private int page;
     OnLoanCalcSelectedListener mCallback;
@@ -90,19 +90,22 @@ public class LoanCalculator extends Fragment implements OnClickListener {
         super.onActivityCreated(icicle);
         //TextView tvLabel = (TextView) view.findViewById(R.id.tvLabel);
         //tvLabel.setText(page + "--" + title);
-        ((EditText) getView().findViewById(R.id.loan_amount_text)).addTextChangedListener(new TextValidator((EditText) getView().findViewById(R.id.loan_amount_text)));
-        ((EditText) getView().findViewById(R.id.interest_rate_text)).addTextChangedListener(new TextValidator((EditText) getView().findViewById(R.id.interest_rate_text)));
-        ((EditText) getView().findViewById(R.id.number_of_years_text)).addTextChangedListener(new TextValidator((EditText) getView().findViewById(R.id.number_of_years_text)));
+        loanAmountText = ((EditText) getView().findViewById(R.id.loan_amount_text));
+        loanAmountText.addTextChangedListener(new TextValidator((EditText) getView().findViewById(R.id.loan_amount_text)));
+
+        interestRateText = ((EditText) getView().findViewById(R.id.interest_rate_text));
+        interestRateText.addTextChangedListener(new TextValidator((EditText) getView().findViewById(R.id.interest_rate_text)));
+
+        numberOfYearsText = ((EditText) getView().findViewById(R.id.number_of_years_text));
+        numberOfYearsText.addTextChangedListener(new TextValidator((EditText) getView().findViewById(R.id.number_of_years_text)));
+
+        monthlyPaymentText = ((EditText) getView().findViewById(R.id.monthly_payment_text));
+        monthlyPaymentText.addTextChangedListener(new TextValidator((EditText) getView().findViewById(R.id.monthly_payment_text)));
 
         Button calculateButton = (Button) getView().findViewById(R.id.calculate_button);
         calculateButton.setOnClickListener(this);
         Button resetButton = (Button) getView().findViewById(R.id.reset_button);
         resetButton.setOnClickListener(this);
-
-
-
-
-
     }
 
 
@@ -132,6 +135,7 @@ public class LoanCalculator extends Fragment implements OnClickListener {
                             et.setError("Please enter a valid number");
                         }//end try catch statement
                         break;
+
                     case R.id.interest_rate_text:
                         interestRateText = (EditText) getView().findViewById(R.id.interest_rate_text);
                         try{
@@ -140,10 +144,20 @@ public class LoanCalculator extends Fragment implements OnClickListener {
                             et.setError("Please enter a valid number");
                         }//end try catch statement
                         break;
+
                     case R.id.number_of_years_text:
                         numberOfYearsText = (EditText) getView().findViewById(R.id.number_of_years_text);
                         try{
-                            numberOfYearsText = (EditText) getView().findViewById(R.id.number_of_years_text);
+                            numberOfYears = Double.parseDouble(numberOfYearsText.getText().toString());
+                        }catch(NumberFormatException nfe) {
+                            et.setError("Please enter a valid number");
+                        }
+                        break;
+
+                    case R.id.monthly_payment_text:
+                        monthlyPaymentText = (EditText) getView().findViewById(R.id.monthly_payment_text);
+                        try{
+                            payment = Double.parseDouble(monthlyPaymentText.getText().toString());
                         }catch(NumberFormatException nfe) {
                             et.setError("Please enter a valid number");
                         }
@@ -153,16 +167,25 @@ public class LoanCalculator extends Fragment implements OnClickListener {
         }OnLoanCalcSelectedListener mCallback;
     }
 
+    public void calculatePayment() {
+        loanAmount = interestRate * payment;
+        loanAmountText.setText(Double.toString(loanAmount));
 
+    }
+
+    public void resetPayment(){
+
+    }
 
     @Override
     //Switch statement is not working here.
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.calculate_button:
-                interestRateText.setText(Double.toString(loanAmount *2));
+               calculatePayment();
 
                 break;
+
             case R.id.reset_button:
                 //interestRate = null;
                 //interestRateText.setText.
