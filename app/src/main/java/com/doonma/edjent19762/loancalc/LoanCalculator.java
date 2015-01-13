@@ -17,10 +17,6 @@ import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 
-
-/**
-
- */
 public class LoanCalculator extends Fragment implements OnClickListener {
 
     EditText loanAmountText;
@@ -29,10 +25,10 @@ public class LoanCalculator extends Fragment implements OnClickListener {
     EditText monthlyPaymentText;
     Button resetButton;
     Button calculateButton;
-    Double loanAmount = 0.0;
-    Double interestRate =0.0;
-    Double numberOfYears= 0.0;
-    Double payment =0.0;
+    Double loanAmount = null;
+    Double interestRate =null;
+    Double numberOfYears= null;
+    Double payment =null;
     private static String title = "Loan Calculator";
     private int page;
     OnLoanCalcSelectedListener mCallback;
@@ -163,26 +159,73 @@ public class LoanCalculator extends Fragment implements OnClickListener {
                         }
                         break;
                 }
+
             }
         }OnLoanCalcSelectedListener mCallback;
     }
 
-    public void calculatePayment() {
-      double ratePerPeriod = interestRate/ 100/12;
-      Toast.makeText(getActivity(), "The Rate Per Period is: " + ratePerPeriod, Toast.LENGTH_LONG).show();
-      double numerator = ratePerPeriod * loanAmount;
+    public void calculateMissingValue() {
 
-        double denominator = 1- (Math.pow(1+ratePerPeriod, (-numberOfYears *12)));
-        payment= numerator/denominator;
-        monthlyPaymentText.setText(Double.toString(payment));
+      if(isAbleToCalculate() == true){
+            Toast.makeText(getActivity(), "the loan amount is: " + loanAmount, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "the interest rate is: " + interestRate, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "the number of years are: " +numberOfYears, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "the monthly payment is: " + payment, Toast.LENGTH_LONG).show();
+
+          calculatePayment();
+
+
+    }else{
+          Toast.makeText(getActivity(), "Three or more of the values need to be filled", Toast.LENGTH_LONG).show();
+      }
+
+      }
+
+    public EditText calculatePayment() {
+
+        double ratePerPeriod = interestRate / 100 / 12;
+        Toast.makeText(getActivity(), "The Rate Per Period is: " + ratePerPeriod, Toast.LENGTH_LONG).show();
+        double numerator = ratePerPeriod * loanAmount;
+
+        double denominator = 1 - (Math.pow(1 + ratePerPeriod, (-numberOfYears * 12)));
+        payment = numerator / denominator;
+        return (EditText) monthlyPaymentText.setText(Double.toString(payment));
+
+
 
     }
 
     public void resetPayment(){
+       interestRate = null;
        interestRateText.setText(Double.toString(0.0));
+       payment = null;
        monthlyPaymentText.setText(Double.toString(0.0));
+       numberOfYears = null;
        numberOfYearsText.setText(Double.toString(0.0));
+       loanAmount = null;
        loanAmountText.setText(Double.toString(0.0));
+
+    }
+
+    public boolean isAbleToCalculate() {
+        int counter = 0;
+        if(interestRate != null) {
+            counter++;
+        }
+        if(loanAmount !=null) {
+            counter++;
+        }
+        if(payment != null) {
+            counter++;
+        }
+        if(numberOfYears !=null) {
+            counter ++;
+        }
+        if(counter == 3){
+            return true;
+        }else{
+            return false;
+        }
 
     }
 
@@ -191,7 +234,7 @@ public class LoanCalculator extends Fragment implements OnClickListener {
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.calculate_button:
-               calculatePayment();
+               calculateMissingValue();
 
                 break;
 
