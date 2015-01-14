@@ -29,6 +29,7 @@ public class LoanCalculator extends Fragment implements OnClickListener {
     Double interestRate =null;
     Double numberOfYears= null;
     Double payment =null;
+    int counter = 0;
     private static String title = "Loan Calculator";
     private int page;
     OnLoanCalcSelectedListener mCallback;
@@ -166,6 +167,7 @@ public class LoanCalculator extends Fragment implements OnClickListener {
 
     public void calculateMissingValue() {
 
+        Toast.makeText(getActivity(),  "Value of counter is = " + counter, Toast.LENGTH_LONG ).show();
         if (isAbleToCalculate() == true) {
           /*  Toast.makeText(getActivity(), "the loan amount is: " + loanAmount, Toast.LENGTH_LONG).show();
             Toast.makeText(getActivity(), "the interest rate is: " + interestRate, Toast.LENGTH_LONG).show();
@@ -179,18 +181,22 @@ public class LoanCalculator extends Fragment implements OnClickListener {
                 calculateInterestRate();
             } else if (numberOfYears == null) {
                 //number of years function to be named later
-                calculateNumberOfYears();
+                //calculateNumberOfYears();
             } else {
                 //function to calculate the loan amount
-                calculateLoanAmount();
+                //calculateLoanAmount();
             }
+
 
 
       }else{
           Toast.makeText(getActivity(), "Three or more of the values need to be filled", Toast.LENGTH_LONG).show();
       }
-
+        //counter = 0;
       }
+    public void calculateInterestRate() {
+        Toast.makeText(getActivity(), "The Interest Rate Function Works!!!", Toast.LENGTH_LONG).show();
+    }
 
     public void calculatePayment() {
 
@@ -201,6 +207,8 @@ public class LoanCalculator extends Fragment implements OnClickListener {
         double denominator = 1 - (Math.pow(1 + ratePerPeriod, (-numberOfYears * 12)));
         payment = numerator / denominator;
         monthlyPaymentText.setText(Double.toString(payment));
+
+
 
     }
 
@@ -218,7 +226,7 @@ public class LoanCalculator extends Fragment implements OnClickListener {
 
 
     public boolean isAbleToCalculate() {
-        int counter = 0;
+
         if(interestRate != null) {
             counter++;
         }
