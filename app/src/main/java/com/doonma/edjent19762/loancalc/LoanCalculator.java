@@ -117,10 +117,15 @@ public class LoanCalculator extends Fragment implements OnClickListener {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
         @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count){}
+        public void afterTextChanged(Editable s)
+        {
+
+
+        }
 
         @Override
-        public void afterTextChanged(Editable s) {
+        public void onTextChanged(CharSequence s, int start, int before, int count)
+        {
             final EditText et = mEditText.get();
             if(et !=null) {
                 switch(et.getId()) {
@@ -128,6 +133,7 @@ public class LoanCalculator extends Fragment implements OnClickListener {
                         loanAmountText = (EditText) getView().findViewById(R.id.loan_amount_text);
                         try{
                             loanAmount = Double.parseDouble(loanAmountText.getText().toString());
+                            Toast.makeText(getActivity(), "The value of loan amount is: " + loanAmount, Toast.LENGTH_LONG).show();
                         }catch(NumberFormatException nfe) {
                             et.setError("Please enter a valid number");
                         }//end try catch statement
@@ -137,6 +143,7 @@ public class LoanCalculator extends Fragment implements OnClickListener {
                         interestRateText = (EditText) getView().findViewById(R.id.interest_rate_text);
                         try{
                             interestRate = Double.parseDouble(interestRateText.getText().toString());
+                            Toast.makeText(getActivity(), "The value of interest rate is: " + interestRate, Toast.LENGTH_LONG).show();
                         }catch(NumberFormatException nfe) {
                             et.setError("Please enter a valid number");
                         }//end try catch statement
@@ -144,8 +151,10 @@ public class LoanCalculator extends Fragment implements OnClickListener {
 
                     case R.id.number_of_years_text:
                         numberOfYearsText = (EditText) getView().findViewById(R.id.number_of_years_text);
+
                         try{
                             numberOfYears = Double.parseDouble(numberOfYearsText.getText().toString());
+                            Toast.makeText(getActivity(), "The value for number of years is: ) " + numberOfYears, Toast.LENGTH_LONG).show();
                         }catch(NumberFormatException nfe) {
                             et.setError("Please enter a valid number");
                         }
@@ -167,38 +176,44 @@ public class LoanCalculator extends Fragment implements OnClickListener {
 
     public void calculateMissingValue() {
 
-        Toast.makeText(getActivity(),  "Value of counter is = " + counter, Toast.LENGTH_LONG ).show();
-        if (isAbleToCalculate() == true) {
+        //Toast.makeText(getActivity(),  "Value of counter is = " + counter, Toast.LENGTH_LONG ).show();
+        //if (isAbleToCalculate() == true) {
           /*  Toast.makeText(getActivity(), "the loan amount is: " + loanAmount, Toast.LENGTH_LONG).show();
             Toast.makeText(getActivity(), "the interest rate is: " + interestRate, Toast.LENGTH_LONG).show();
             Toast.makeText(getActivity(), "the number of years are: " +numberOfYears, Toast.LENGTH_LONG).show();
             Toast.makeText(getActivity(), "the monthly payment is: " + payment, Toast.LENGTH_LONG).show();
            */
-            if (payment == null) {
+
+            FINISH FLESHING THIS OUT
+            if (payment == null && interestRate != null && numberOfYears != null && loanAmount !=null) {
                 calculatePayment();
-            } else if (interestRate == null) {
+                payment =null;
+            } else if (interestRate == null && payment !=null  && numberOfYears !=null && loanAmount !=null) {
                 //interest rate function to be name later
                 calculateInterestRate();
+                interestRate=null;
             } else if (numberOfYears == null) {
                 //number of years function to be named later
                 //calculateNumberOfYears();
             } else {
                 //function to calculate the loan amount
                 //calculateLoanAmount();
+                Toast.makeText(getActivity(), "Three or more of the values need to be filled", Toast.LENGTH_LONG).show();
             }
 
 
 
-      }else{
-          Toast.makeText(getActivity(), "Three or more of the values need to be filled", Toast.LENGTH_LONG).show();
+
+
       }
-        //counter = 0;
-      }
+
+
     public void calculateInterestRate() {
         Toast.makeText(getActivity(), "The Interest Rate Function Works!!!", Toast.LENGTH_LONG).show();
     }
 
     public void calculatePayment() {
+
 
         double ratePerPeriod = interestRate / 100 / 12;
         Toast.makeText(getActivity(), "The Rate Per Period is: " + ratePerPeriod, Toast.LENGTH_LONG).show();
@@ -221,11 +236,11 @@ public class LoanCalculator extends Fragment implements OnClickListener {
        numberOfYearsText.setText(Double.toString(0.0));
        loanAmount = null;
        loanAmountText.setText(Double.toString(0.0));
-
+       counter = 0;
     }
 
 
-    public boolean isAbleToCalculate() {
+    /*public boolean isAbleToCalculate() {
 
         if(interestRate != null) {
             counter++;
@@ -245,7 +260,7 @@ public class LoanCalculator extends Fragment implements OnClickListener {
             return false;
         }
 
-    }
+    }*/
 
     @Override
     //Switch statement is not working here.
