@@ -1,23 +1,29 @@
 package com.doonma.edjent19762.loancalc;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.KeyListener;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 
 import java.lang.ref.WeakReference;
 
-public class LoanCalculator extends Fragment implements OnClickListener {
+public class LoanCalculator extends Fragment implements OnClickListener, OnItemSelectedListener {
 
     EditText loanAmountText;
     EditText interestRateText;
@@ -29,11 +35,12 @@ public class LoanCalculator extends Fragment implements OnClickListener {
     Double interestRate =null;
     Double numberOfYears= null;
     Double payment =null;
-    int counter = 0;
     private static String title = "Loan Calculator";
     private int page;
     OnLoanCalcSelectedListener mCallback;
     private MainActivity myActivity = null;
+    private KeyListener listener;
+    Spinner spinner;
 
     public static LoanCalculator newInstance(int page, String title) {
         LoanCalculator loanCalculator = new LoanCalculator();
@@ -44,12 +51,91 @@ public class LoanCalculator extends Fragment implements OnClickListener {
         return loanCalculator;
     }
 
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id ){
+
+        loanAmount = null;
+        loanAmountText.setText(null);
+
+        interestRate = null;
+        interestRateText.setText(null);
+
+        numberOfYears = null;
+        numberOfYearsText.setText(null);
+
+        payment = null;
+        monthlyPaymentText.setText(null);
+
+        switch(parent.getSelectedItemPosition()) {
+            case 0:
+                resetColor();
+                Toast.makeText(getActivity(), "You Selected Loan Amount", Toast.LENGTH_LONG).show();
+                loanAmountText.setText("Value To Be Calculated");
+                loanAmountText.setTextColor(Color.RED);
+                makeEnabled();
+                loanAmountText.setEnabled(false);
+
+                break;
+
+            case 1:
+                resetColor();
+                Toast.makeText(getActivity(), "You Selected Interest Rate", Toast.LENGTH_LONG).show();
+                interestRateText.setText("Value To Be Calculated");
+                interestRateText.setTextColor(Color.RED);
+                makeEnabled();
+                interestRateText.setEnabled(false);
+                break;
+
+            case 2:
+                resetColor();
+                Toast.makeText(getActivity(), "You Selected Number of Years", Toast.LENGTH_LONG).show();
+                numberOfYearsText.setText("Value To Be Calculated");
+                numberOfYearsText.setTextColor(Color.RED);
+                makeEnabled();
+                numberOfYearsText.setEnabled(false);
+
+                break;
+
+            case 3:
+                resetColor();
+                Toast.makeText(getActivity(), "You Selected Monthly Payment", Toast.LENGTH_LONG).show();
+                monthlyPaymentText.setText("Value To Be Calculated");
+                monthlyPaymentText.setTextColor(Color.RED);
+                makeEnabled();
+                monthlyPaymentText.setEnabled(false);
+
+                break;
+
+            default:
+                resetColor();
+                Toast.makeText(getActivity(), "You Have Not Selected Anything", Toast.LENGTH_LONG).show();
+                break;
+        }
+
+
+    }
+
+
+    public void onNothingSelected(AdapterView<?> parent){}
+
     //Container Activity must implement this interface
     public interface OnLoanCalcSelectedListener{
         public void calculatePayment();
     }
 
+    public  void resetColor(){
+        monthlyPaymentText.setTextColor(Color.BLACK);
+        interestRateText.setTextColor(Color.BLACK);
+        loanAmountText.setTextColor(Color.BLACK);
+        numberOfYearsText.setTextColor(Color.BLACK);
 
+    }
+
+    public void makeEnabled(){
+        loanAmountText.setEnabled(true);
+        interestRateText.setEnabled(true);
+        numberOfYearsText.setEnabled(true);
+        monthlyPaymentText.setEnabled(true);
+    }
     public static String getTitle() {
         return title;
     }
@@ -80,13 +166,22 @@ public class LoanCalculator extends Fragment implements OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_loan_calculator, container, false);
 
+
         return view;
     }
     @Override
     public void onActivityCreated(Bundle icicle) {
         super.onActivityCreated(icicle);
-        //TextView tvLabel = (TextView) view.findViewById(R.id.tvLabel);
-        //tvLabel.setText(page + "--" + title);
+
+        spinner = (Spinner) getView().findViewById(R.id.value_to_calculate_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource
+                (getActivity(), R.array.calculate_choices, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(this);
+
+
         loanAmountText = ((EditText) getView().findViewById(R.id.loan_amount_text));
         loanAmountText.addTextChangedListener(new TextValidator((EditText) getView().findViewById(R.id.loan_amount_text)));
 
@@ -171,96 +266,95 @@ public class LoanCalculator extends Fragment implements OnClickListener {
                 }
 
             }
-        }OnLoanCalcSelectedListener mCallback;
+        }
     }
 
-    public void calculateMissingValue() {
+    public void calculateMissingValue(){
 
-        //Toast.makeText(getActivity(),  "Value of counter is = " + counter, Toast.LENGTH_LONG ).show();
-        //if (isAbleToCalculate() == true) {
-          /*  Toast.makeText(getActivity(), "the loan amount is: " + loanAmount, Toast.LENGTH_LONG).show();
-            Toast.makeText(getActivity(), "the interest rate is: " + interestRate, Toast.LENGTH_LONG).show();
-            Toast.makeText(getActivity(), "the number of years are: " +numberOfYears, Toast.LENGTH_LONG).show();
-            Toast.makeText(getActivity(), "the monthly payment is: " + payment, Toast.LENGTH_LONG).show();
-           */
+//        Toast.makeText(getActivity(), payment.toString(), Toast.LENGTH_LONG).show();
+        if(spinner.getSelectedItemPosition() == 0){
+            calculateLoanAmount();
 
-            FINISH FLESHING THIS OUT
-            if (payment == null && interestRate != null && numberOfYears != null && loanAmount !=null) {
-                calculatePayment();
-                payment =null;
-            } else if (interestRate == null && payment !=null  && numberOfYears !=null && loanAmount !=null) {
-                //interest rate function to be name later
-                calculateInterestRate();
-                interestRate=null;
-            } else if (numberOfYears == null) {
-                //number of years function to be named later
-                //calculateNumberOfYears();
-            } else {
-                //function to calculate the loan amount
-                //calculateLoanAmount();
-                Toast.makeText(getActivity(), "Three or more of the values need to be filled", Toast.LENGTH_LONG).show();
-            }
+        }else if(spinner.getSelectedItemPosition() == 1 ) {
+            calculateInterestRate();
 
+        }else if(spinner.getSelectedItemPosition() == 2) {
+            calculateNumberOfYears();
+        }
+        else if(spinner.getSelectedItemPosition() ==3) {
+            calculatePayment();
+        }else{
+            Toast.makeText(getActivity(), "Please Select A Value To Calculate", Toast.LENGTH_LONG).show();
+        }
 
-
-
-
-      }
-
+    }
 
     public void calculateInterestRate() {
+
+        
         Toast.makeText(getActivity(), "The Interest Rate Function Works!!!", Toast.LENGTH_LONG).show();
+
+    }
+
+    public void calculateNumberOfYears(){
+        Toast.makeText(getActivity(), "The Calculate Number of Years Function Works!!!", Toast.LENGTH_LONG).show();
+    }
+
+    public void calculateLoanAmount() {
+
+        loanAmountText.setText(null);
+            try {
+                if (interestRateText != null && monthlyPaymentText != null && numberOfYearsText != null) {
+                    double numerator = 1 - (Math.pow((1 + interestRate/100), -(numberOfYears * 12)));
+                    loanAmount = payment * (numerator / (interestRate/100));
+                    loanAmountText.setText(loanAmount.toString());
+                } else {
+                    Toast.makeText(getActivity(), "Please Make Sure You Have Entered All Required Values", Toast.LENGTH_LONG).show();
+                }
+            }catch(NullPointerException npe){
+                Toast.makeText(getActivity(), "Unable To Create A Value", Toast.LENGTH_LONG).show();
+            }
     }
 
     public void calculatePayment() {
 
-
-        double ratePerPeriod = interestRate / 100 / 12;
-        Toast.makeText(getActivity(), "The Rate Per Period is: " + ratePerPeriod, Toast.LENGTH_LONG).show();
-        double numerator = ratePerPeriod * loanAmount;
-
-        double denominator = 1 - (Math.pow(1 + ratePerPeriod, (-numberOfYears * 12)));
-        payment = numerator / denominator;
-        monthlyPaymentText.setText(Double.toString(payment));
-
-
-
+        monthlyPaymentText.setText(null);
+            try {
+                if (loanAmountText != null && interestRateText != null && numberOfYearsText != null) {
+                    double ratePerPeriod = interestRate / 100 / 12;
+                    //Toast.makeText(getActivity(), "The Rate Per Period is: " + ratePerPeriod, Toast.LENGTH_LONG).show();
+                    double numerator = ratePerPeriod * loanAmount;
+                    double denominator = 1 - (Math.pow(1 + ratePerPeriod, (-numberOfYears * 12)));
+                    payment = numerator / denominator;
+                    monthlyPaymentText.setText(payment.toString());
+                } else {
+                    Toast.makeText(getActivity(), "Please Make Sure You Have Entered All Required Values", Toast.LENGTH_LONG).show();
+                }//end else statement
+            }catch (NullPointerException npe){
+                Toast.makeText(getActivity(), "Unable to Create A Value", Toast.LENGTH_LONG).show();
+            }
     }
 
     public void resetPayment(){
+
+       interestRateText.setText(null);
        interestRate = null;
-       interestRateText.setText(Double.toString(0.0));
+
+       monthlyPaymentText.setText(null);
        payment = null;
-       monthlyPaymentText.setText(Double.toString(0.0));
+
+       numberOfYearsText.setText(null);
        numberOfYears = null;
-       numberOfYearsText.setText(Double.toString(0.0));
+
+       loanAmountText.setText(null);
        loanAmount = null;
-       loanAmountText.setText(Double.toString(0.0));
-       counter = 0;
+
+      resetColor();
     }
 
 
-    /*public boolean isAbleToCalculate() {
 
-        if(interestRate != null) {
-            counter++;
-        }
-        if(loanAmount !=null) {
-            counter++;
-        }
-        if(payment != null) {
-            counter++;
-        }
-        if(numberOfYears !=null) {
-            counter ++;
-        }
-        if(counter == 3){
-            return true;
-        }else{
-            return false;
-        }
 
-    }*/
 
     @Override
     //Switch statement is not working here.

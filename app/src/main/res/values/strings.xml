@@ -5,4 +5,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <string-array name="calculate_choices">
+        <item>Loan Amount</item>
+        <item>Interest Rate</item>
+        <item>Number Of Years</item>
+        <item>Monthly Payment</item>
+    </string-array>
 </resources>

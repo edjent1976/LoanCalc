@@ -16,6 +16,11 @@
          android:layout_height="wrap_content"
          android:text="Loan Amount"
          /> -->
+    <Spinner
+        android:id="@+id/value_to_calculate_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+    </Spinner>
 
     <EditText
         android:id="@+id/loan_amount_text"
