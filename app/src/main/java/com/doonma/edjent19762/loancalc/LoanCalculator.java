@@ -122,7 +122,7 @@ public class LoanCalculator extends Fragment implements OnClickListener, OnItemS
         public void calculatePayment();
     }
 
-    public  void resetColor(){
+    public void resetColor(){
         monthlyPaymentText.setTextColor(Color.BLACK);
         interestRateText.setTextColor(Color.BLACK);
         loanAmountText.setTextColor(Color.BLACK);
@@ -291,6 +291,12 @@ public class LoanCalculator extends Fragment implements OnClickListener, OnItemS
 
     public void calculateInterestRate() {
 
+        interestRateText.setText(null);
+
+
+
+
+
         
         Toast.makeText(getActivity(), "The Interest Rate Function Works!!!", Toast.LENGTH_LONG).show();
 
@@ -298,7 +304,39 @@ public class LoanCalculator extends Fragment implements OnClickListener, OnItemS
 
     public void calculateNumberOfYears(){
         Toast.makeText(getActivity(), "The Calculate Number of Years Function Works!!!", Toast.LENGTH_LONG).show();
-    }
+        numberOfYearsText.setText(null);
+
+        try {
+            if(interestRateText != null && loanAmountText != null && monthlyPaymentText != null){
+
+                double interestRateMonth = interestRate/100/12;
+                Toast.makeText(getActivity(),"The Monthly Interest Rate Is = " + interestRateMonth,Toast.LENGTH_LONG ).show();
+                double prinDiPaymentMulIrm = (loanAmount/payment) * interestRateMonth;
+                Toast.makeText(getActivity(), "Loan Amount Divided Payment Multiplied By IPM: "+ prinDiPaymentMulIrm, Toast.LENGTH_LONG).show();
+                double numberMinusOne = 1 - prinDiPaymentMulIrm;
+                Toast.makeText(getActivity(), "1 - prinDiPaymentMulIrm: " + numberMinusOne, Toast.LENGTH_LONG ).show();
+                double intRateMonthPlus1 = interestRateMonth +1;
+                Toast.makeText(getActivity(), "InterestRateMonthPlus1: " + intRateMonthPlus1, Toast.LENGTH_LONG).show();
+                double negLog = Math.log(-numberMinusOne);
+                Toast.makeText(getActivity(), "Neg log: " + negLog, Toast.LENGTH_LONG).show();
+                double log = Math.log(intRateMonthPlus1);
+                Toast.makeText(getActivity(), "log: " + log, Toast.LENGTH_LONG).show();
+                double fiveBySix = negLog/log;
+                Toast.makeText(getActivity(), "fiveBySix: " + fiveBySix, Toast.LENGTH_LONG  ).show();
+                numberOfYears = (fiveBySix/12.00);
+                numberOfYearsText.setText(numberOfYears.toString());
+
+
+
+             }else {
+                Toast.makeText(getActivity(), "Please Make Sure You Have Entered All Values", Toast.LENGTH_LONG).show();
+            }
+         }catch(NullPointerException npe) {
+                    Toast.makeText(getActivity(), "All Values Have Not Been Entered", Toast.LENGTH_LONG).show();
+            }
+
+        }
+
 
     public void calculateLoanAmount() {
 
