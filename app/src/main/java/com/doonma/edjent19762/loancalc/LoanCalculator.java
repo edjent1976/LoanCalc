@@ -317,9 +317,9 @@ public class LoanCalculator extends Fragment implements OnClickListener, OnItemS
                 Toast.makeText(getActivity(), "1 - prinDiPaymentMulIrm: " + numberMinusOne, Toast.LENGTH_LONG ).show();
                 double intRateMonthPlus1 = interestRateMonth +1;
                 Toast.makeText(getActivity(), "InterestRateMonthPlus1: " + intRateMonthPlus1, Toast.LENGTH_LONG).show();
-                double negLog = Math.log(-numberMinusOne);
+                double negLog = -Math.log10(.6666667);
                 Toast.makeText(getActivity(), "Neg log: " + negLog, Toast.LENGTH_LONG).show();
-                double log = Math.log(intRateMonthPlus1);
+                double log = Math.log10(intRateMonthPlus1);
                 Toast.makeText(getActivity(), "log: " + log, Toast.LENGTH_LONG).show();
                 double fiveBySix = negLog/log;
                 Toast.makeText(getActivity(), "fiveBySix: " + fiveBySix, Toast.LENGTH_LONG  ).show();
