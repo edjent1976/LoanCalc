@@ -291,9 +291,20 @@ public class LoanCalculator extends Fragment implements OnClickListener, OnItemS
 
     public void calculateInterestRate() {
 
+        double calculatedPayment = 0.0;
         interestRateText.setText(null);
+        interestRate = 0.0;
 
 
+        double q = Math.log10(1+(1/(numberOfYears*12)))/Math.log10(2);
+
+        interestRate = Math.pow((Math.abs(Math.pow((1+(payment/loanAmount)),(1/q))-1)),q)-1;
+        //interestRate = Math.abs(Math.pow(1+payment/loanAmount,1/q)-1)-1;
+
+      interestRate *=12*100;
+
+
+        interestRateText.setText(interestRate.toString());
 
 
 
@@ -317,7 +328,7 @@ public class LoanCalculator extends Fragment implements OnClickListener, OnItemS
                 Toast.makeText(getActivity(), "1 - prinDiPaymentMulIrm: " + numberMinusOne, Toast.LENGTH_LONG ).show();
                 double intRateMonthPlus1 = interestRateMonth +1;
                 Toast.makeText(getActivity(), "InterestRateMonthPlus1: " + intRateMonthPlus1, Toast.LENGTH_LONG).show();
-                double negLog = -Math.log10(.6666667);
+                double negLog = -Math.log10(intRateMonthPlus1);
                 Toast.makeText(getActivity(), "Neg log: " + negLog, Toast.LENGTH_LONG).show();
                 double log = Math.log10(intRateMonthPlus1);
                 Toast.makeText(getActivity(), "log: " + log, Toast.LENGTH_LONG).show();
@@ -342,9 +353,14 @@ public class LoanCalculator extends Fragment implements OnClickListener, OnItemS
 
         loanAmountText.setText(null);
             try {
+                double interestRatePerMonthPlus1 = 1+interestRate/12/100;
+                Toast.makeText(getActivity(), "Intersest Rate Per Month = " + interestRatePerMonthPlus1,Toast.LENGTH_LONG).show();
+                double totalNumberOfPayments = numberOfYears*12;
                 if (interestRateText != null && monthlyPaymentText != null && numberOfYearsText != null) {
-                    double numerator = 1 - (Math.pow((1 + interestRate/100), -(numberOfYears * 12)));
-                    loanAmount = payment * (numerator / (interestRate/100));
+                    double loanAmountNumerator = payment/(interestRatePerMonthPlus1-1);
+                    double loanAmountDenominator = 1- (Math.pow((interestRatePerMonthPlus1),-totalNumberOfPayments));
+
+                    loanAmount = loanAmountNumerator*loanAmountDenominator;
                     loanAmountText.setText(loanAmount.toString());
                 } else {
                     Toast.makeText(getActivity(), "Please Make Sure You Have Entered All Required Values", Toast.LENGTH_LONG).show();
