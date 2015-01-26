@@ -2,6 +2,7 @@ package com.doonma.edjent19762.loancalc;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -17,6 +18,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -42,6 +44,7 @@ public class LoanCalculator extends Fragment implements OnClickListener, OnItemS
     private KeyListener listener;
     Spinner spinner;
 
+
     public static LoanCalculator newInstance(int page, String title) {
         LoanCalculator loanCalculator = new LoanCalculator();
         Bundle args = new Bundle();
@@ -55,15 +58,19 @@ public class LoanCalculator extends Fragment implements OnClickListener, OnItemS
 
         loanAmount = null;
         loanAmountText.setText(null);
+        //loanAmountText.setTypeface(roboto_slim);
 
         interestRate = null;
         interestRateText.setText(null);
+        //interestRateText.setTypeface(roboto_slim);
 
         numberOfYears = null;
         numberOfYearsText.setText(null);
+        //numberOfYearsText.setTypeface(roboto_slim);
 
         payment = null;
         monthlyPaymentText.setText(null);
+        //monthlyPaymentText.setTypeface(roboto_slim);
 
         switch(parent.getSelectedItemPosition()) {
             case 0:
@@ -173,6 +180,12 @@ public class LoanCalculator extends Fragment implements OnClickListener, OnItemS
     public void onActivityCreated(Bundle icicle) {
         super.onActivityCreated(icicle);
 
+        Typeface roboto_slim = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
+
+
+
+
+
         spinner = (Spinner) getView().findViewById(R.id.value_to_calculate_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource
                 (getActivity(), R.array.calculate_choices, android.R.layout.simple_spinner_item);
@@ -182,22 +195,34 @@ public class LoanCalculator extends Fragment implements OnClickListener, OnItemS
         spinner.setOnItemSelectedListener(this);
 
 
+
+
         loanAmountText = ((EditText) getView().findViewById(R.id.loan_amount_text));
         loanAmountText.addTextChangedListener(new TextValidator((EditText) getView().findViewById(R.id.loan_amount_text)));
+        loanAmountText.setTypeface(roboto_slim);
+
 
         interestRateText = ((EditText) getView().findViewById(R.id.interest_rate_text));
         interestRateText.addTextChangedListener(new TextValidator((EditText) getView().findViewById(R.id.interest_rate_text)));
+        interestRateText.setTypeface(roboto_slim);
+
 
         numberOfYearsText = ((EditText) getView().findViewById(R.id.number_of_years_text));
         numberOfYearsText.addTextChangedListener(new TextValidator((EditText) getView().findViewById(R.id.number_of_years_text)));
+        numberOfYearsText.setTypeface(roboto_slim);
+
 
         monthlyPaymentText = ((EditText) getView().findViewById(R.id.monthly_payment_text));
         monthlyPaymentText.addTextChangedListener(new TextValidator((EditText) getView().findViewById(R.id.monthly_payment_text)));
+        monthlyPaymentText.setTypeface(roboto_slim);
 
         Button calculateButton = (Button) getView().findViewById(R.id.calculate_button);
         calculateButton.setOnClickListener(this);
+        calculateButton.setTypeface(roboto_slim);
+
         Button resetButton = (Button) getView().findViewById(R.id.reset_button);
         resetButton.setOnClickListener(this);
+        resetButton.setTypeface(roboto_slim);
     }
 
 
@@ -381,6 +406,9 @@ public class LoanCalculator extends Fragment implements OnClickListener, OnItemS
                     double denominator = 1 - (Math.pow(1 + ratePerPeriod, (-numberOfYears * 12)));
                     payment = numerator / denominator;
                     monthlyPaymentText.setText(payment.toString());
+                    monthlyPaymentText.setBackgroundColor(0xffcccccc);
+
+
                 } else {
                     Toast.makeText(getActivity(), "Please Make Sure You Have Entered All Required Values", Toast.LENGTH_LONG).show();
                 }//end else statement
